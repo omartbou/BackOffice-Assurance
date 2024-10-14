@@ -18,6 +18,7 @@
         <td>{{ getPersonType(client.est_personne) }}</td> <!-- Custom logic here -->
 
         <td>
+          <button class="btn btn-info" @click="showDetail(client.id)" data-bs-toggle="modal" data-bs-target="#clientDetailModal">View</button>
           <router-link :to="{ name: 'Update', params: { id: client.id } }" class="btn btn-warning">Edit</router-link>
           <button @click.prevent="deleteClient(client.id)">Delete</button>
         </td>
@@ -29,13 +30,24 @@
       </div>
     </div>
   </div>
+    <Detail ref="detail" />
+
   </div>
+
 </template>
 
 <script setup>
   import axios from 'axios';
   import { ref, onMounted } from 'vue';
   const clients = ref([]);
+  import Detail from './Detail.vue';
+  const detail = ref(null);
+
+  const showDetail = async (id) => {
+    if (detail.value) {
+      await detail.value.showClientDetails(id); // Access the method of Detail component
+    }
+  };
 
 
   const getPersonType = (estPersonne) => {
