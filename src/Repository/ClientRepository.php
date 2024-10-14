@@ -11,9 +11,29 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ClientRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $entityManager;
+    public function __construct(ManagerRegistry $registry )
     {
         parent::__construct($registry, Client::class);
+        $this->entityManager = $this->getEntityManager(); // Get the Entity Manager
+
+    }
+    public function findAllClients(){
+      return $this->findAll();
+    }
+    public function findClientById($id){
+        return $this->find($id);
+    }
+    public function saveClient(Client $client){
+        $this->entityManager->persist($client);
+        $this->entityManager->flush();
+
+    }
+    public function deleteClient(Client $client)
+    {
+
+        $this->entityManager->remove($client); // Use the injected Entity Manager
+        $this->entityManager->flush(); // Flush changes to the database
     }
 
     //    /**

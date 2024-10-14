@@ -89,7 +89,7 @@ class Client
 
     public function isEstPersonne(): ?bool
     {
-        return $this->est_personne;
+        return $this->est_personne ? 'Professionnel' : 'Particulier';
     }
 
     public function setEstPersonne(?bool $est_personne): static
