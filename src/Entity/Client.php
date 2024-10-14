@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 class Client
@@ -14,25 +15,30 @@ class Client
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['devis:read', 'client:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 20)]
+    #[Groups(['devis:read', 'client:read'])]
     private ?string $nom = null;
 
     #[ORM\Column(length: 20)]
+    #[Groups(['devis:read', 'client:read'])]
     private ?string $prenom = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['devis:read', 'client:read'])]
     private ?\DateTimeInterface $date_naissance = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['devis:read', 'client:read'])]
     private ?bool $est_personne = null;
 
     /**
      * @var Collection<int, Devis>
      */
     #[ORM\OneToMany(targetEntity: Devis::class, mappedBy: 'client')]
-    private Collection $Devis;
+    private Collection $devis;
 
     /**
      * @var Collection<int, Voiture>
@@ -42,7 +48,7 @@ class Client
 
     public function __construct()
     {
-        $this->Devis = new ArrayCollection();
+        $this->devis = new ArrayCollection();
         $this->voitures = new ArrayCollection();
     }
 
@@ -104,25 +110,25 @@ class Client
      */
     public function getDevis(): Collection
     {
-        return $this->Devis;
+        return $this->devis;
     }
 
-    public function addDevi(Devis $devi): static
+    public function addDevi(Devis $devis): static
     {
-        if (!$this->Devis->contains($devi)) {
-            $this->Devis->add($devi);
-            $devi->setClient($this);
+        if (!$this->devis->contains($devis)) {
+            $this->devis->add($devis);
+            $devis->setClient($this);
         }
 
         return $this;
     }
 
-    public function removeDevi(Devis $devi): static
+    public function removeDevi(Devis $devis): static
     {
-        if ($this->Devis->removeElement($devi)) {
+        if ($this->devis->removeElement($devis)) {
             // set the owning side to null (unless already changed)
-            if ($devi->getClient() === $this) {
-                $devi->setClient(null);
+            if ($devis->getClient() === $this) {
+                $devis->setClient(null);
             }
         }
 

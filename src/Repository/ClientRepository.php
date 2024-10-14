@@ -18,12 +18,8 @@ class ClientRepository extends ServiceEntityRepository
         $this->entityManager = $this->getEntityManager(); // Get the Entity Manager
 
     }
-    public function findAllClients(){
-      return $this->findAll();
-    }
-    public function findClientById($id){
-        return $this->find($id);
-    }
+
+
     public function saveClient(Client $client){
         $this->entityManager->persist($client);
         $this->entityManager->flush();

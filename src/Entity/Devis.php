@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: DevisRepository::class)]
@@ -15,21 +16,27 @@ class Devis
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['devis:read', 'devis:write'])]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'uuid')]
-    private ?Uuid $numero = null;
+    #[ORM\Column(type: 'string', length: 36)]
+    #[Groups(['devis:read', 'devis:write'])]
+    private ?string $numero = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['devis:read', 'devis:write'])]
     private ?\DateTimeInterface $date_effet = null;
 
     #[ORM\Column]
+    #[Groups(['devis:read', 'devis:write'])]
     private ?float $prix = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['devis:read', 'devis:write'])]
     private ?string $frequence_prix = null;
 
-    #[ORM\ManyToOne(inversedBy: 'Devis')]
+    #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'devis')]
+    #[Groups(['devis:read'])]
     private ?Client $client = null;
 
     /**
@@ -48,12 +55,12 @@ class Devis
         return $this->id;
     }
 
-    public function getNumero(): ?Uuid
+    public function getNumero(): ?string
     {
         return $this->numero;
     }
 
-    public function setNumero(Uuid $numero): static
+    public function setNumero(string $numero): static
     {
         $this->numero = $numero;
 

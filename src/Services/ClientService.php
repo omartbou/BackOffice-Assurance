@@ -13,11 +13,13 @@ class ClientService
 
     }
     public function clientList(){
-        return $this->clientRepository->findAllClients();
+        return $this->clientRepository->findAll();
     }
+
     public function getClientById($id){
-        return $this->clientRepository->findClientById($id);
+        return $this->clientRepository->find($id);
     }
+
     public function createClient(array $data): Client
     {
         $client =new Client();

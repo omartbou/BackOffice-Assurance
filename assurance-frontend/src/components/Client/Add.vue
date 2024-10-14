@@ -50,7 +50,6 @@ const addClient = async () => {
   }
 };
 
-// Function to go back to the client list
 const goBack = () => {
   router.push('/clients');
 };

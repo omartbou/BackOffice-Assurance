@@ -8,18 +8,18 @@
       </div>
     <div class="card h-100">
       <div class="card-body">
-        <router-link :to="{ name: 'Add'}" class="btn btn-warning">Add</router-link>
+        <router-link :to="{ name: 'AddClient'}" class="btn btn-warning">Add</router-link>
 
         <table class="table">
       <tbody>
       <tr v-for="client in clients" :key="client.id">
        <td> {{ client.nom }} {{client.prenom}} </td>
         <td>{{ formatDate(client.dateNaissance) }}</td>
-        <td>{{ getPersonType(client.est_personne) }}</td> <!-- Custom logic here -->
+        <td>{{ getPersonType(client.est_personne) }}</td>
 
         <td>
           <button class="btn btn-info" @click="showDetail(client.id)" data-bs-toggle="modal" data-bs-target="#clientDetailModal">View</button>
-          <router-link :to="{ name: 'Update', params: { id: client.id } }" class="btn btn-warning">Edit</router-link>
+          <router-link :to="{ name: 'UpdateClient', params: { id: client.id } }" class="btn btn-warning">Edit</router-link>
           <button @click.prevent="deleteClient(client.id)">Delete</button>
         </td>
       </tr>

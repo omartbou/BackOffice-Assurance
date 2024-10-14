@@ -21,8 +21,10 @@ class ClientController extends AbstractController
     public function getClients(): JsonResponse
     {
         $clients = $this->clientService->clientList();
-        return $this->json($clients);
+        return $this->json($clients, Response::HTTP_CREATED, [], ['groups' => ['client:read']]);
     }
+
+    //Afficher les details du client
     #[Route('/client/{id}', name: 'get_client', methods: ['GET'])]
     public function getClient($id): JsonResponse
     {
@@ -32,6 +34,8 @@ class ClientController extends AbstractController
         }
         return $this->json($client);
     }
+
+    //Sauvegarder le client
     #[Route('/clients/post', name: 'create_client', methods: ['POST'])]
     public function createClient(Request $request): JsonResponse
     {
@@ -46,6 +50,7 @@ class ClientController extends AbstractController
 
         return $this->json($client, 201);
     }
+    //Modifier le client
     #[Route('/clients/edit/{id}', name: 'update_client', methods: ['PUT'])]
     public function updateClient($id, Request $request): JsonResponse
     {
@@ -59,6 +64,8 @@ class ClientController extends AbstractController
         $updatedClient = $this->clientService->updateClient($client, $data);
         return $this->json($updatedClient);
     }
+
+    //Supprimer le client
     #[Route('/clients/{id}', name: 'delete_client', methods: ['DELETE'])]
     public function deleteClient($id): JsonResponse
     {
@@ -70,4 +77,5 @@ class ClientController extends AbstractController
         $this->clientService->deleteClient($client);
         return $this->json(['message' => 'Client deleted successfully']);
     }
+
 }

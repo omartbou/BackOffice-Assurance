@@ -28,6 +28,8 @@ final class Version20241014145316 extends AbstractMigration
         $this->addSql('ALTER TABLE devis_voiture ADD CONSTRAINT FK_7B0C1A5341DEFADA FOREIGN KEY (devis_id) REFERENCES devis (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE devis_voiture ADD CONSTRAINT FK_7B0C1A53181A8BA FOREIGN KEY (voiture_id) REFERENCES voiture (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE voiture ADD CONSTRAINT FK_E9E2810F19EB6921 FOREIGN KEY (client_id) REFERENCES client (id)');
+        $this->addSql('ALTER TABLE devis MODIFY numero VARCHAR(36)');
+
     }
 
     public function down(Schema $schema): void
