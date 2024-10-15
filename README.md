@@ -110,7 +110,6 @@ Voici quelques endpoints clés de l'API :
 ### Frontend (Vue.js)
 
 - `src/components/` : Composants Vue pour afficher et gérer les données.
-- `src/services/` : Service API pour interagir avec le backend.
 - `src/views/` : Vues principales pour les opérations CRUD.
   
  Si vous souhaitez apporter des modifications ou ajouter des informations supplémentaires, faites-le-moi savoir !
