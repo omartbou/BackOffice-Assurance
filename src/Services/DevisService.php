@@ -48,17 +48,17 @@ class DevisService
         }
         $devis->setClient($client);
 
-//
-//        if (isset($data['voitures'])) {
-//            foreach ($data['voitures'] as $voitureId) {
-//                $voiture = $this->voitureRepository->find($voitureId);
-//                if ($voiture) {
-//                    $devis->addVoiture($voiture);
-//                } else {
-//                    throw new NotFoundHttpException('Voiture with ID ' . $voitureId . ' not found');
-//                }
-//            }
-//        }
+        if (isset($data['voitures'])) {
+
+            foreach ($data['voitures'] as $voitureId) {
+                $voiture = $this->voitureRepository->find($voitureId);
+                if ($voiture) {
+                    $devis->addVoiture($voiture);
+                } else {
+                    throw new NotFoundHttpException('Voiture with ID ' . $voitureId . ' not found');
+                }
+            }
+        }
 
         $this->devisRepository->saveDevis($devis);
 

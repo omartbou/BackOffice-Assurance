@@ -32,7 +32,7 @@ class ClientController extends AbstractController
         if (!$client) {
             return $this->json(['error' => 'Client not found'], 404);
         }
-        return $this->json($client);
+        return $this->json($client, Response::HTTP_CREATED, [], ['groups' => ['client:read']]);
     }
 
     //Sauvegarder le client
@@ -48,7 +48,7 @@ class ClientController extends AbstractController
 
         $client = $this->clientService->createClient($data);
 
-        return $this->json($client, 201);
+        return $this->json($client, Response::HTTP_CREATED, [], ['groups' => ['client:read']]);
     }
     //Modifier le client
     #[Route('/clients/edit/{id}', name: 'update_client', methods: ['PUT'])]
@@ -62,7 +62,7 @@ class ClientController extends AbstractController
         }
 
         $updatedClient = $this->clientService->updateClient($client, $data);
-        return $this->json($updatedClient);
+        return $this->json($updatedClient, Response::HTTP_CREATED, [], ['groups' => ['client:read']]);
     }
 
     //Supprimer le client

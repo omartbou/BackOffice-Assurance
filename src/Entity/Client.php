@@ -38,12 +38,14 @@ class Client
      * @var Collection<int, Devis>
      */
     #[ORM\OneToMany(targetEntity: Devis::class, mappedBy: 'client')]
+    #[Groups(['client:read'])]
     private Collection $devis;
 
     /**
      * @var Collection<int, Voiture>
      */
     #[ORM\OneToMany(targetEntity: Voiture::class, mappedBy: 'client')]
+    #[Groups(['client:read'])]
     private Collection $voitures;
 
     public function __construct()

@@ -35,6 +35,7 @@ class DevisController extends AbstractController
         }
         $jsonDevis = $serializer->serialize($devis, 'json', ['groups' => ['read']]);
         return $this->json($devis, 200, [], ['groups' => 'devis:read']);
+
     }
     //Ajouter un devis
     #[Route('/devis/post', name: 'create_devis', methods: ['POST'])]
@@ -47,7 +48,6 @@ class DevisController extends AbstractController
         }
 
         $devis = $this->devisService->createDevis($data);
-
         return $this->json($devis, Response::HTTP_CREATED, [], ['groups' => ['devis:read']]);
     }
 

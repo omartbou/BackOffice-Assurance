@@ -2,7 +2,7 @@
   <div>
     <!-- Bootstrap Modal -->
     <div class="modal fade" id="clientDetailModal" tabindex="-1" aria-labelledby="clientDetailModalLabel" aria-hidden="true" @hidden.bs.modal="resetClientDetails">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="clientDetailModalLabel">Client Details</h5>
@@ -13,6 +13,19 @@
             <p><strong>Prénom:</strong> {{ client.prenom }}</p>
             <p><strong>Date de Naissance:</strong> {{ formatDate(client.date_naissance) }}</p>
             <p><strong>Type:</strong> {{ getPersonType(client.est_personne) }}</p>
+
+            <h6>Devis:</h6>
+            <div v-if="devis.length">
+              <ul class="list-group">
+                <li v-for="d in devis" :key="d.id" class="list-group-item">
+                  <strong>Numéro:</strong> {{ d.numero }} -
+                  <strong>Prix:</strong> {{ d.prix }} / {{ d.frequence_prix }}
+                </li>
+              </ul>
+            </div>
+            <div v-else>
+              <p>Aucun devis associé.</p>
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -33,6 +46,7 @@ const client = ref({
   date_naissance: '',
   est_personne: 0,
 });
+const devis = ref([]); // Reactive state for devis
 
 // Function to format the date
 const formatDate = (dateString) => {
@@ -48,8 +62,16 @@ const getPersonType = (estPersonne) => {
 
 // Function to fetch client details by ID
 const fetchClientDetails = async (id) => {
-  const response = await axios.get(`http://localhost:8000/api/client/${id}`);
-  Object.assign(client.value, response.data); // Assign fetched data to client object
+  try {
+    const response = await axios.get(`http://localhost:8000/api/client/${id}`);
+    Object.assign(client.value, response.data); // Assign fetched data to client object
+    devis.value = response.data.devis || [];
+    devis.value.devis = null;
+
+    // Fetch associated devis
+  } catch (error) {
+    console.error('Error fetching client data:', error.response ? error.response.data : error.message);
+  }
 };
 
 // Expose the function to the parent component
@@ -62,9 +84,14 @@ const showClientDetails = async (id) => {
 // Function to reset client details when modal is closed
 const resetClientDetails = () => {
   client.value = { nom: '', prenom: '', date_naissance: '', est_personne: 0 }; // Reset client data
+  devis.value = []; // Reset devis data
 };
 
 defineExpose({
   showClientDetails,
 });
 </script>
+
+<style scoped>
+/* Add any additional styling here */
+</style>

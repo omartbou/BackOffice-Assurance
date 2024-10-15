@@ -9,18 +9,20 @@ import AddDevis from '../components/Devis/Add.vue';
 import AddVoiture from '../components/Voiture/Add.vue';
 import UpdateVoiture from '../components/Voiture/Update.vue';
 import ListVoiture from '../components/Voiture/List.vue';
+import HomeView from '../views/HomeView.vue';
 
 const routes = [
   {
-    path: '/clients',
-    name: 'client',
-    component: Client,
+    path: '/',
+    name: 'HomeView',
+    component: HomeView,
   },
   {
-    path: '/about',
-    name: 'about',
-    component: () => import('../views/AboutView.vue'), // Lazy loading the About component
+    path: '/clients',
+    name: 'Client',
+    component: Client,
   },
+
   {
     path: '/client/update/:id',
     name: 'UpdateClient',

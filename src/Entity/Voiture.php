@@ -15,12 +15,12 @@ class Voiture
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['voiture:read', 'voiture:write'])]
+    #[Groups(['voiture:read', 'voiture:write','devis:read','client:read'])]
 
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['voiture:read', 'voiture:write'])]
+    #[Groups(['voiture:read', 'voiture:write','devis:read','client:read'])]
     private ?string $numero_immatriculation = null;
 
     #[ORM\Column(length: 50)]
@@ -32,13 +32,14 @@ class Voiture
     private ?\DateTimeInterface $date_achat = null;
 
     #[ORM\ManyToOne(inversedBy: 'voitures')]
-    #[Groups(['voiture:read'])]
+    #[Groups(['voiture:read','devis:read'])]
     private ?Client $client = null;
 
     /**
      * @var Collection<int, Devis>
      */
     #[ORM\ManyToMany(targetEntity: Devis::class, mappedBy: 'voitures')]
+    #[Groups(['voiture:read','voiture:write'])]
     private Collection $devis;
 
     #[ORM\Column(length: 50)]

@@ -16,23 +16,23 @@ class Devis
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['devis:read', 'devis:write'])]
+    #[Groups(['devis:read','voiture:read','voiture:write', 'devis:write'])]
     private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 36)]
-    #[Groups(['devis:read', 'devis:write'])]
+    #[Groups(['devis:read', 'devis:write','client:read'])]
     private ?string $numero = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Groups(['devis:read', 'devis:write'])]
+    #[Groups(['devis:read', 'devis:write','client:read'])]
     private ?\DateTimeInterface $date_effet = null;
 
     #[ORM\Column]
-    #[Groups(['devis:read', 'devis:write'])]
+    #[Groups(['devis:read', 'devis:write','client:read'])]
     private ?float $prix = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['devis:read', 'devis:write'])]
+    #[Groups(['devis:read', 'devis:write','client:read'])]
     private ?string $frequence_prix = null;
 
     #[ORM\ManyToOne(targetEntity: Client::class, inversedBy: 'devis')]
@@ -43,6 +43,7 @@ class Devis
      * @var Collection<int, Voiture>
      */
     #[ORM\ManyToMany(targetEntity: Voiture::class, inversedBy: 'devis')]
+    #[Groups(['devis:read','devis:write'])]
     private Collection $voitures;
 
     public function __construct()
