@@ -1,0 +1,31 @@
+# Système de Gestion de Courtage d'Assurance
+
+Ce projet est une application web de backoffice permettant de gérer les clients, les voitures, et les devis d’assurance d’une entreprise de courtage. Le frontend est développé en Vue.js et le backend utilise Symfony avec API Platform.
+
+## Fonctionnalités
+
+- Gestion des Clients : Ajouter, modifier, voir et supprimer des clients.
+- Gestion des Voitures : Gérer les voitures associées aux clients.
+- Gestion des Devis : Ajouter, mettre à jour et supprimer des devis d’assurance. Associer des clients et des voitures aux devis.
+- Interface Sombre Moderne : Interface utilisateur avec un thème sombre, moderne et intuitif.
+
+## Prérequis
+
+Avant d’exécuter ce projet, assurez-vous d’avoir installé les outils suivants :
+
+- [Node.js](https://nodejs.org/) (version 14 ou supérieure)
+- [Vue CLI](https://cli.vuejs.org/) (facultatif pour le développement Vue)
+- Backend avec Symfony, configuré avec les bonnes routes et une base de données
+
+## Installation
+
+1. Clonez le dépôt du projet :
+
+```bash
+git clone https://github.com/omartbou/BackOffice-Assurance.git
+
+Installation Frontend (Vue.js)
+
+Installez les dépendances du projet :
+
+npm install
