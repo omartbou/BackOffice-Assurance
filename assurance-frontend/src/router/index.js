@@ -6,6 +6,9 @@ import AddClient from '../components/Client/Add.vue';
 import ListDevis from '../components/Devis/List.vue';
 import UpdateDevis from '../components/Devis/Update.vue';
 import AddDevis from '../components/Devis/Add.vue';
+import AddVoiture from '../components/Voiture/Add.vue';
+import UpdateVoiture from '../components/Voiture/Update.vue';
+import ListVoiture from '../components/Voiture/List.vue';
 
 const routes = [
   {
@@ -46,6 +49,24 @@ const routes = [
     path: '/devis/update/:id',
     name: 'UpdateDevis',
     component: UpdateDevis,
+
+  },
+  {
+    path: '/voiture/add',
+    name: 'AddVoiture',
+    component: AddVoiture,
+
+  },
+  {
+    path: '/voiture/update/:id',
+    name: 'UpdateVoiture',
+    component: UpdateVoiture,
+
+  },
+  {
+    path: '/voitures/',
+    name: 'ListVoiture',
+    component: ListVoiture,
 
   },
 ];

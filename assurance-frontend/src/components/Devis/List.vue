@@ -42,10 +42,8 @@ import axios from 'axios';
 import { ref, onMounted } from 'vue';
 const devis = ref([]);
 import Detail from './Detail.vue';
-import Add from './Add.vue';
 
 const detail = ref(null);
-const addDevis = ref(null);
 
 const showDetail = async (id) => {
   if (detail.value) {

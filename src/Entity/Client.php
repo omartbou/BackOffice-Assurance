@@ -15,23 +15,23 @@ class Client
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['devis:read', 'client:read'])]
+    #[Groups(['devis:read','voiture:read', 'client:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 20)]
-    #[Groups(['devis:read', 'client:read'])]
+    #[Groups(['devis:read','voiture:read', 'client:read'])]
     private ?string $nom = null;
 
     #[ORM\Column(length: 20)]
-    #[Groups(['devis:read', 'client:read'])]
+    #[Groups(['devis:read','voiture:read', 'client:read'])]
     private ?string $prenom = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Groups(['devis:read', 'client:read'])]
+    #[Groups(['devis:read','voiture:read', 'client:read'])]
     private ?\DateTimeInterface $date_naissance = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['devis:read', 'client:read'])]
+    #[Groups(['devis:read','voiture:read', 'client:read'])]
     private ?bool $est_personne = null;
 
     /**

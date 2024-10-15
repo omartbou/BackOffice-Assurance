@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: VoitureRepository::class)]
 class Voiture
@@ -14,18 +15,24 @@ class Voiture
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['voiture:read', 'voiture:write'])]
+
     private ?int $id = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['voiture:read', 'voiture:write'])]
     private ?string $numero_immatriculation = null;
 
     #[ORM\Column(length: 50)]
-    private ?string $usage = null;
+    #[Groups(['voiture:read', 'voiture:write'])]
+    private ?string $voiture_usage = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['voiture:read', 'voiture:write'])]
     private ?\DateTimeInterface $date_achat = null;
 
     #[ORM\ManyToOne(inversedBy: 'voitures')]
+    #[Groups(['voiture:read'])]
     private ?Client $client = null;
 
     /**
@@ -33,6 +40,10 @@ class Voiture
      */
     #[ORM\ManyToMany(targetEntity: Devis::class, mappedBy: 'voitures')]
     private Collection $devis;
+
+    #[ORM\Column(length: 50)]
+    #[Groups(['voiture:read', 'voiture:write'])]
+    private ?string $emplacement = null;
 
     public function __construct()
     {
@@ -56,14 +67,14 @@ class Voiture
         return $this;
     }
 
-    public function getUsage(): ?string
+    public function getVoitureUsage(): ?string
     {
-        return $this->usage;
+        return $this->voiture_usage;
     }
 
-    public function setUsage(string $usage): static
+    public function setVoitureUsage(string $voiture_usage): static
     {
-        $this->usage = $usage;
+        $this->voiture_usage = $voiture_usage;
 
         return $this;
     }
@@ -115,6 +126,18 @@ class Voiture
         if ($this->devis->removeElement($devi)) {
             $devi->removeVoiture($this);
         }
+
+        return $this;
+    }
+
+    public function getEmplacement(): ?string
+    {
+        return $this->emplacement;
+    }
+
+    public function setEmplacement(string $emplacement): static
+    {
+        $this->emplacement = $emplacement;
 
         return $this;
     }
