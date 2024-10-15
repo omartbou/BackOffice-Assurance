@@ -25,8 +25,8 @@ Assurez-vous d'avoir les éléments suivants installés :
 
 1. Cloner le dépôt :
    ```bash
-   git clone https://github.com/omartbou/insurance-backoffice-backend.git
-   cd insurance-backoffice-backend
+   git clone https://github.com/omartbou/BackOffice-Assurance.git
+   cd BackOffice-Assurance
    ```
 
 2. Installer les dépendances :
