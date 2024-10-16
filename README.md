@@ -56,6 +56,8 @@ Assurez-vous d'avoir les éléments suivants installés :
 1. Installer les dépendances :
    ```bash
    npm install
+   npm install axios 
+   npm install pinia
    ```
 
 2. Démarrer le serveur de développement :
