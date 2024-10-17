@@ -4,10 +4,7 @@
     <div class="modal fade" id="clientDetailModal" tabindex="-1" aria-labelledby="clientDetailModalLabel" aria-hidden="true" @hidden.bs.modal="resetClientDetails">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="clientDetailModalLabel">Client Details</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
+
           <div class="modal-body">
             <p><strong>Nom:</strong> {{ client.nom }}</p>
             <p><strong>Prénom:</strong> {{ client.prenom }}</p>
@@ -27,9 +24,7 @@
               <p>Aucun devis associé.</p>
             </div>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          </div>
+
         </div>
       </div>
     </div>

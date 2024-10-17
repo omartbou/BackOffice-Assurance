@@ -5,21 +5,27 @@
     <form @submit.prevent="updateClient" class="bg-dark p-4 rounded">
       <div class="mb-3">
         <label for="nom" class="form-label text-white">Nom</label>
-        <input type="text" id="nom" v-model="client.nom" class="form-control" required />
+        <input type="text" id="nom" v-model="client.nom"
+               :class="client.nom.length ? validClass : errorClass" class="form-control" required />
       </div>
       <div class="mb-3">
         <label for="prenom" class="form-label text-white">Prénom</label>
-        <input type="text" id="prenom" v-model="client.prenom" class="form-control" required />
+        <input type="text" id="prenom" v-model="client.prenom"
+               :class="client.prenom.length ? validClass : errorClass" class="form-control" required />
       </div>
       <div class="mb-3">
         <label for="date_naissance" class="form-label text-white">Date de Naissance</label>
-        <input type="date" id="date_naissance" v-model="client.date_naissance" class="form-control" required />
+        <input type="date" id="date_naissance" v-model="client.date_naissance"
+               :class="client.date_naissance.length ? validClass : errorClass"
+               class="form-control" required />
       </div>
       <div class="mb-3">
         <label for="est_personne" class="form-label text-white">Type</label>
-        <select id="est_personne" v-model="client.est_personne" class="form-select" required>
-          <option value="0">Particulier</option>
-          <option value="1">Professionnel</option>
+        <select id="est_personne" v-model="client.est_personne"
+                :class="validClass"
+                class="form-select" required>
+          <option :value="false">Particulier</option>
+          <option :value="true">Professionnel</option>
         </select>
       </div>
       <div class="d-flex">
@@ -45,16 +51,23 @@ const client = ref({
   nom: '',
   prenom: '',
   date_naissance: '',
-  est_personne: 0,
+  est_personne: false,
 });
 const successMessage = ref(''); // Reactive state for success message
 const clientId = route.params.id; // Get client ID from route params
-
+const validClass=ref("form-control is-valid");
+const errorClass=ref("form-control is-invalid");
 // Fetch client data when component is mounted
 onMounted(async () => {
   try {
     const response = await axios.get(`http://localhost:8000/api/client/${clientId}`);
-    Object.assign(client.value, response.data); // Assign fetched data to client object
+    Object.assign(client.value, response.data);
+    client.value = {
+      ...response.data,
+      date_naissance: response.data.date_naissance ? new Date(response.data.date_naissance).toISOString().split('T')[0] : '',
+    };
+
+
   } catch (error) {
     console.error('Error fetching client data:', error.response ? error.response.data : error.message);
   }

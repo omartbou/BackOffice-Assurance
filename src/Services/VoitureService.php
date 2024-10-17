@@ -44,18 +44,6 @@ class VoitureService
         }
         $voiture->setClient($client);
 
-
-        if (isset($data['devis'])) {
-            foreach ($data['devis'] as $devisId) {
-                $devis = $this->devisRepository->find($devisId);
-                if ($devis) {
-                    $voiture->add($devis);
-                } else {
-                    throw new NotFoundHttpException('Devis with ID ' . $devisId . ' not found');
-                }
-            }
-        }
-
         $this->voitureRepository->saveVoiture($voiture);
 
         return $voiture;
@@ -71,16 +59,6 @@ class VoitureService
         }
         $voiture->setClient($client);
 
-        if (isset($data['devis'])) {
-            foreach ($data['devis'] as $devisId) {
-                $devis = $this->devisRepository->find($devisId);
-                if ($devis) {
-                    $voiture->add($devis);
-                } else {
-                    throw new NotFoundHttpException('Devis with ID ' . $devisId . ' not found');
-                }
-            }
-        }
         $this->voitureRepository->saveVoiture($voiture);
 
         return $voiture;

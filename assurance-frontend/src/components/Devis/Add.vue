@@ -5,7 +5,9 @@
     <form @submit.prevent="addDevis" class="bg-dark p-4 rounded">
       <div class="mb-3">
         <label for="client" class="form-label text-white">Client</label>
-        <select id="client" v-model="selectedClientId" @change="fetchVoitures" class="form-select" required>
+        <select id="client" v-model="selectedClientId"
+                :class="selectedClientId !==null ? validClass:errorClass"
+                @change="fetchVoitures" class="form-select" required>
           <option value="" disabled>Sélectionner un client</option>
           <option v-for="client in clients" :key="client.id" :value="client.id">
             {{ client.nom }} {{ client.prenom }}
@@ -15,7 +17,9 @@
 
       <div class="mb-3" v-if="voitures.length > 0">
         <label for="voiture" class="form-label text-white">Voiture</label>
-        <select id="voiture" v-model="devis.voitures" class="form-select" multiple required>
+        <select id="voiture" v-model="devis.voitures"
+                :class="devis.voitures !== null ? validClass:errorClass"
+                class="form-select" multiple required>
           <option value="" disabled>Sélectionner une voiture</option>
           <option v-for="voiture in voitures" :key="voiture.id" :value="voiture.id">
             {{ voiture.numero_immatriculation }}
@@ -25,17 +29,24 @@
 
       <div class="mb-3">
         <label for="prix" class="form-label text-white">Prix</label>
-        <input type="number" id="prix" v-model="devis.prix" class="form-control" required />
+        <input type="number" id="prix" v-model="devis.prix"
+               :class="devis.prix !== null ? validClass:errorClass"
+               class="form-control" required />
       </div>
 
       <div class="mb-3">
         <label for="frequence_prix" class="form-label text-white">Fréquence Prix</label>
-        <input type="text" id="frequence_prix" v-model="devis.frequence_prix" class="form-control" required />
+        <input type="text" id="frequence_prix"
+               v-model="devis.frequence_prix"
+               :class="devis.frequence_prix.length ? validClass:errorClass"
+               class="form-control" required />
       </div>
 
       <div class="mb-3">
         <label for="date_effet" class="form-label text-white">Date d'effet</label>
-        <input type="date" id="date_effet" v-model="devis.date_effet" class="form-control" required />
+        <input type="date" id="date_effet" v-model="devis.date_effet"
+               :class="devis.date_effet.length ? validClass:errorClass"
+               class="form-control" required />
       </div>
 
       <div class="d-flex">
@@ -62,7 +73,8 @@ const devis = ref({
   frequence_prix: '',
   voitures: null,
 });
-
+const validClass=ref("form-control is-valid");
+const errorClass=ref("form-control is-invalid");
 const getClients = async () => {
   try {
     const response = await axios.get('http://localhost:8000/api/clients/');
@@ -90,6 +102,7 @@ const fetchVoitures = async () => {
 onMounted(() => {
   getClients();
 });
+const successMessage = ref('');
 
 const addDevis = async () => {
   devis.value.client_id = selectedClientId.value;
@@ -102,8 +115,10 @@ const addDevis = async () => {
     await axios.post('http://localhost:8000/api/devis/post', {
       ...devis.value,
     });
+    successMessage.value = 'Devis ajouté avec success!'; // Set success message
 
-    router.push('/devis');
+    // Redirect to the home page with the success message
+    router.push({ name: 'ListDevis', query: { message: successMessage.value } });
   } catch (error) {
     console.error('Error adding devis:', error.response ? error.response.data : error.message);
   }

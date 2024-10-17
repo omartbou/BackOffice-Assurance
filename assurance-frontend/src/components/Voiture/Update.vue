@@ -5,7 +5,9 @@
     <form @submit.prevent="updateVoiture" class="bg-dark p-4 rounded">
       <div class="mb-3">
         <label for="client" class="form-label text-white">Client</label>
-        <select id="client" v-model="voiture.client_id" class="form-select" required>
+        <select id="client" v-model="voiture.client_id"
+                :class="voiture.client_id !== null ? validClass:errorClass"
+                class="form-select" required>
           <option value="" disabled>Sélectionner un client</option>
           <option v-for="client in clients" :key="client.id" :value="client.id">
             {{ client.nom }} {{ client.prenom }}
@@ -15,17 +17,23 @@
 
       <div class="mb-3">
         <label for="usage" class="form-label text-white">Usage</label>
-        <input type="text" id="usage" v-model="voiture.voiture_usage" class="form-control" required />
+        <input type="text" id="usage" v-model="voiture.voiture_usage"
+               :class="voiture.voiture_usage !== null ? validClass:errorClass"
+               class="form-control" required />
       </div>
 
       <div class="mb-3">
         <label for="emplacement" class="form-label text-white">Emplacement</label>
-        <input type="text" id="emplacement" v-model="voiture.emplacement" class="form-control" required />
+        <input type="text" id="emplacement" v-model="voiture.emplacement"
+               :class="voiture.emplacement !== null ? validClass:errorClass"
+               class="form-control" required />
       </div>
 
       <div class="mb-3">
         <label for="date_achat" class="form-label text-white">Date d'achat</label>
-        <input type="date" id="date_achat" v-model="voiture.date_achat" class="form-control" required />
+        <input type="date" id="date_achat" v-model="voiture.date_achat"
+               :class="voiture.date_achat !== null ? validClass:errorClass"
+               class="form-control" required />
       </div>
 
       <div class="d-flex">
@@ -50,7 +58,8 @@ const voiture = ref({
   emplacement: '',
   client_id: null,
 });
-
+const validClass=ref("form-control is-valid");
+const errorClass=ref("form-control is-invalid");
 const getClients = async () => {
   try {
     const response = await axios.get('http://localhost:8000/api/clients');
@@ -67,7 +76,7 @@ onMounted(() => {
     getVoiture(voitureId);
   }
 });
-
+const successMessage = ref('');
 const getVoiture = async (id) => {
   try {
     const response = await axios.get(`http://localhost:8000/api/voiture/${id}`);
@@ -76,6 +85,8 @@ const getVoiture = async (id) => {
     voiture.value = {
       ...fetchedVoiture,
       client_id: fetchedVoiture.client?.id || null,
+      date_achat: fetchedVoiture.date_achat ? new Date(fetchedVoiture.date_achat).toISOString().split('T')[0] : ''
+
     };
   } catch (error) {
     console.error('Error fetching voiture:', error);
@@ -85,8 +96,12 @@ const getVoiture = async (id) => {
 const updateVoiture = async () => {
   try {
     await axios.put(`http://localhost:8000/api/voiture/edit/${voiture.value.id}`, voiture.value);
-    router.push('/voitures');
-  } catch (error) {
+    successMessage.value = 'Voiture modifée avec success!'; // Set success message
+
+    // Redirect to the home page with the success message
+    router.push({ name: 'ListVoiture', query: { message: successMessage.value } });
+  }
+  catch (error) {
     console.error('Error updating voiture:', error.response ? error.response.data : error.message);
   }
 };
