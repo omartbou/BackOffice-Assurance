@@ -193,7 +193,14 @@ const toggleEditMode = () => {
   if (isEditing.value) {
     // Validate before saving
     if (validateDevis()) {
-      axios.put(`http://localhost:8000/api/devis/edit/${devis.value.id}`, devis.value)
+      const devisPlayload = {
+        prix: devis.value.prix,
+        frequence_prix: devis.value.frequence_prix,
+        date_effet: devis.value.date_effet,
+        client_id:devis.value.client_id ,
+        voitures: voitures.value ? voitures.value.id : null
+      };
+      axios.put(`http://localhost:8000/api/devis/edit/${devis.value.id}`, devisPlayload)
           .then(response => {
             console.log('Changes saved!');
             successMessage.value = 'Devis mis à jour avec succès!';

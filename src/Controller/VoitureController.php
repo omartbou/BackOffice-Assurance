@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Services\VoitureService;
+use App\Validator\VoitureValidatorRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,8 +16,11 @@ use Symfony\Component\Serializer\SerializerInterface;
 class VoitureController extends AbstractController
 {
     private $voitureService;
-    public function __construct(VoitureService $voitureService){
+    private $voitureValidator;
+    public function __construct(VoitureService $voitureService,VoitureValidatorRequest $voitureValidator){
         $this->voitureService = $voitureService;
+        $this->voitureValidator = $voitureValidator; // Initialize the validator
+
     }
     //Afficher les voitures
     #[Route('/voitures', name: 'app_voitures')]
@@ -45,8 +49,11 @@ class VoitureController extends AbstractController
         if (!$data) {
             return $this->json(['error' => 'Invalid JSON'], 400);
         }
-
-        $voiture = $this->voitureService->createVoiture($data);
+        $validationResult = $this->voitureValidator->validate($data);
+        if ($validationResult instanceof JsonResponse) {
+            return $validationResult; // Return validation errors
+        }
+        $voiture = $this->voitureService->createVoiture( $validationResult);
 
         return $this->json($voiture, Response::HTTP_CREATED, [], ['groups' => ['voiture:read']]);
     }
@@ -57,12 +64,15 @@ class VoitureController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
         $voiture = $this->voitureService->getVoitureById($id);
-
+        $validationResult = $this->voitureValidator->validate($data);
+        if ($validationResult instanceof JsonResponse) {
+            return $validationResult; // Return validation errors
+        }
         if (!$voiture) {
             return $this->json(['error' => 'Voiture not found'], 404);
         }
 
-        $updatedVoiture= $this->voitureService->updateVoiture($voiture, $data);
+        $updatedVoiture= $this->voitureService->updateVoiture($voiture, $validationResult);
         return $this->json($updatedVoiture, Response::HTTP_CREATED, [], ['groups' => ['devis:read']]);
     }
     //Supprimer la voiture

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Services\ClientService;
+use App\Validator\ClientValidatorRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,8 +14,13 @@ use Symfony\Component\Routing\Attribute\Route;
 class ClientController extends AbstractController
 {
     private $clientService;
-    public function __construct(ClientService $clientService){
+    private $clientValidatorRequest;
+    public function __construct(ClientService $clientService,
+                                ClientValidatorRequest $clientValidatorRequest
+    ){
         $this->clientService = $clientService;
+        $this->clientValidatorRequest = $clientValidatorRequest;
+
     }
     //Afficher les clients
     #[Route('/clients', name: 'app_client')]
@@ -41,14 +47,16 @@ class ClientController extends AbstractController
     {
 
         $data = json_decode($request->getContent(), true);
-
+        $validatedData = $this->clientValidatorRequest->validate($data);
+        if ($validatedData instanceof JsonResponse) {
+            return $validatedData; // Return validation error response
+        }
         if (!$data) {
             return $this->json(['error' => 'Invalid JSON'], 400);
         }
 
-        $client = $this->clientService->createClient($data);
+        $client = $this->clientService->createClient($validatedData);
 
-        return $this->json($client, Response::HTTP_CREATED, [], ['groups' => ['client:read']]);
         return $this->json($client, Response::HTTP_CREATED, [], ['groups' => ['client:read']]);
     }
     //Modifier le client
@@ -57,12 +65,16 @@ class ClientController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
         $client = $this->clientService->getClientById($id);
+        $validatedData = $this->clientValidatorRequest->validate($data);
 
+        if ($validatedData instanceof JsonResponse) {
+            return $validatedData; // Return validation error response
+        }
         if (!$client) {
             return $this->json(['error' => 'Client not found'], 404);
         }
 
-        $updatedClient = $this->clientService->updateClient($client, $data);
+        $updatedClient = $this->clientService->updateClient($client, $validatedData);
         return $this->json($updatedClient, Response::HTTP_CREATED, [], ['groups' => ['client:read']]);
     }
 

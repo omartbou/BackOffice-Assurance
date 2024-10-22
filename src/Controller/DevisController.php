@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Services\DevisService;
+use App\Validator\DevisValidatorRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,8 +16,12 @@ use Symfony\Component\Serializer\SerializerInterface;
 class DevisController extends AbstractController
 {
     private $devisService;
-    public function __construct(DevisService $devisService){
+    private $devisValidatorRequest;
+    public function __construct(DevisService $devisService ,
+                                DevisValidatorRequest $devisValidatorRequest
+    ){
         $this->devisService = $devisService;
+        $this->devisValidatorRequest = $devisValidatorRequest;
     }
     //Afficher les devis
     #[Route('/devis', name: 'app_devis')]
@@ -43,11 +48,15 @@ class DevisController extends AbstractController
     {
 
         $data = json_decode($request->getContent(), true);
+        $validatedData = $this->devisValidatorRequest->validate($data);
+        if ($validatedData instanceof JsonResponse) {
+            return $validatedData; // Return validation error response
+        }
         if (!$data) {
             return $this->json(['error' => 'Invalid JSON'], 400);
         }
 
-        $devis = $this->devisService->createDevis($data);
+        $devis = $this->devisService->createDevis($validatedData);
         return $this->json($devis, Response::HTTP_CREATED, [], ['groups' => ['devis:read']]);
     }
 
@@ -57,12 +66,15 @@ class DevisController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
         $devis = $this->devisService->getDevisById($id);
-
+        $validatedData = $this->devisValidatorRequest->validate($data);
+        if ($validatedData instanceof JsonResponse) {
+            return $validatedData; // Return validation error response
+        }
         if (!$devis) {
             return $this->json(['error' => 'Devis not found'], 404);
         }
 
-        $updatedDevis = $this->devisService->updateDevis($devis, $data);
+        $updatedDevis = $this->devisService->updateDevis($devis, $validatedData);
         return $this->json($updatedDevis, Response::HTTP_CREATED, [], ['groups' => ['devis:read']]);
     }
     //Supprimer le devis

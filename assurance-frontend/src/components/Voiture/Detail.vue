@@ -38,6 +38,11 @@
                   <input type="text" class="form-control bg-dark text-white" v-model="voiture.emplacement" :readonly="!isEditing" required />
                   <div v-if="validationErrors.emplacement" class="text-danger">{{ validationErrors.emplacement }}</div>
                 </div>
+                <div class="mb-3">
+                  <label class="form-label"><strong>Numero Immatriculation :</strong></label>
+                  <input type="text" class="form-control bg-dark text-white" v-model="voiture.numero_immatriculation" :readonly="!isEditing" required />
+                  <div v-if="validationErrors.numero_immatriculation" class="text-danger">{{ validationErrors.numero_immatriculation }}</div>
+                </div>
 
                 <div class="mb-3">
                   <label class="form-label"><strong>Date d'achat :</strong></label>
@@ -113,6 +118,8 @@ const fetchVoitureDetails = async (id) => {
     const response = await axios.get(`http://localhost:8000/api/voiture/${id}`);
     Object.assign(voiture.value, response.data);
     voiture.value.client_id = response.data.client?.id || null;
+    voiture.value.date_achat = response.data.date_achat ? new Date(response.data.date_achat).toISOString().split('T')[0] : '';
+
   } catch (error) {
     console.error('Error fetching voiture data:', error.response ? error.response.data : error.message);
     errorMessage.value = 'Erreur lors de la récupération des détails de la voiture.';
@@ -123,8 +130,13 @@ const fetchVoitureDetails = async (id) => {
 const toggleEditMode = () => {
   if (isEditing.value) {
     if (validateVoiture()) {
-      // Save changes
-      axios.put(`http://localhost:8000/api/voiture/edit/${voiture.value.id}`, voiture.value)
+      const voiturePlayload = {
+        date_achat: voiture.value.date_achat,
+        numero_immatriculation: voiture.value.numero_immatriculation,
+        client_id: voiture.value.client_id,
+        voiture_usage:voiture.value.voiture_usage ,
+        emplacement:voiture.value.emplacement ,
+      };      axios.put(`http://localhost:8000/api/voiture/edit/${voiture.value.id}`,voiturePlayload)
           .then(response => {
             console.log('Changes saved!');
             successMessage.value = 'Voiture mis à jour avec succès!'; // Set success message
@@ -167,6 +179,10 @@ const validateVoiture = () => {
 
   if (!voiture.value.voiture_usage) {
     validationErrors.value.voiture_usage = 'L\'usage de la voiture est requis.';
+    isValid = false;
+  }
+  if (!voiture.value.numero_immatriculation) {
+    validationErrors.value.numero_immatriculation = 'Le numero_immatriculation de la voiture est requis.';
     isValid = false;
   }
 

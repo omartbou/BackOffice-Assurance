@@ -61,7 +61,7 @@ const client = ref({
   nom: '',
   prenom: '',
   date_naissance: '',
-  est_personne: 0,
+  est_personne: false,
 });
 
 const errors = ref({});

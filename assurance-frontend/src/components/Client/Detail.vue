@@ -109,10 +109,8 @@ const client = ref({
   prenom: '',
   date_naissance: '',
   est_personne: false,
-  client_id: null,
 });
 const isEditing = ref(false);
-const clientId = ref(null);
 const devis = ref([]);
 const successMessage = ref('');
 const errorMessage = ref('');
@@ -161,7 +159,13 @@ const toggleEditMode = () => {
   if (isEditing.value) {
     // Validate input before saving
     if (validateClient()) {
-      axios.put(`http://localhost:8000/api/clients/edit/${client.value.id}`, client.value)
+      const clientPayload = {
+        nom: client.value.nom,
+        prenom: client.value.prenom,
+        date_naissance: client.value.date_naissance,
+        est_personne: client.value.est_personne
+      };
+      axios.put(`http://localhost:8000/api/clients/edit/${client.value.id}`, clientPayload)
           .then(response => {
             console.log('Changes saved!');
             successMessage.value = 'Client mis à jour avec succès!';
