@@ -158,7 +158,7 @@ const validateAndSubmit = async () => {
       });
       const modal = bootstrap.Modal.getInstance(document.getElementById('addDevisModal'));
       modal.hide();
-      router.push({ name: 'ListDevis' });
+      location.reload();
       // Optionally show success message here
     } catch (error) {
       if (error.response && error.response.data) {

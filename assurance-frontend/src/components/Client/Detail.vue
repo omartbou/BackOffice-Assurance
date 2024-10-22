@@ -110,6 +110,7 @@ const client = ref({
   date_naissance: '',
   est_personne: false,
 });
+const clientId = ref(null);
 const isEditing = ref(false);
 const devis = ref([]);
 const successMessage = ref('');

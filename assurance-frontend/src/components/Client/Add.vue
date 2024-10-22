@@ -100,7 +100,7 @@ const validateAndSubmit = async () => {
       emit('clientAdded');
       const modal = bootstrap.Modal.getInstance(document.getElementById('addClientModal'));
       modal.hide();
-      resetForm();
+      location.reload();
     } catch (error) {
       if (error.response && error.response.data) {
         // Handle server validation errors

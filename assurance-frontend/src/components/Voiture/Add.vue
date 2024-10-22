@@ -131,8 +131,7 @@ const validateAndSubmit = async () => {
   if (validateInputs()) {
     try {
       await axios.post('http://localhost:8000/api/voiture/post', voiture.value);
-      successMessage.value = 'Voiture ajoutée avec succès!'; // Set success message
-      router.push({ name: 'ListVoiture', query: { message: successMessage.value } });
+      location.reload();
     } catch (error) {
       if (error.response && error.response.data) {
         // Handle server validation errors

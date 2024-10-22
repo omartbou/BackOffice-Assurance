@@ -73,6 +73,24 @@
         </div>
       </div>
     </div>
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white">
+          <div class="modal-header">
+            <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmation de suppression</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Êtes-vous sûr de vouloir supprimer cette voiture ?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            <button type="button" class="btn btn-danger" @click="deleteVoiture">Supprimer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -88,6 +106,7 @@ const voiture = ref({
   numero_immatriculation: '',
   emplacement: '',
 });
+const voitureId = ref(null);
 const isEditing = ref(false);
 const successMessage = ref('');
 const errorMessage = ref('');
@@ -189,6 +208,21 @@ const validateVoiture = () => {
   return isValid;
 };
 
+const confirmDelete = (id) => {
+  voitureId.value = id;
+  console.log(voitureId.value);
+  const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+  modal.show();
+};
+const deleteVoiture = async () => {
+  try {
+    await axios.delete(`http://localhost:8000/api/voiture/delete/${voitureId.value}`);
+    location.reload(); // Refresh the list
+  } catch (error) {
+    console.error('Error deleting client:', error);
+    errorMessage.value = 'Erreur lors de la suppression du client.';
+  }
+};
 // Show modal with voiture details
 const showVoitureDetails = async (id) => {
   await fetchVoitureDetails(id);
