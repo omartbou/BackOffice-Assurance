@@ -49,6 +49,7 @@ class ClientController extends AbstractController
         $client = $this->clientService->createClient($data);
 
         return $this->json($client, Response::HTTP_CREATED, [], ['groups' => ['client:read']]);
+        return $this->json($client, Response::HTTP_CREATED, [], ['groups' => ['client:read']]);
     }
     //Modifier le client
     #[Route('/clients/edit/{id}', name: 'update_client', methods: ['PUT'])]
