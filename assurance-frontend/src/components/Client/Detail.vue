@@ -2,7 +2,7 @@
   <div>
     <!-- Bootstrap Modal for Client Details -->
     <div class="modal fade" id="clientDetailModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
+      <div class="modal-dialog modal-xl">
         <div class="modal-content bg-dark text-white">
           <!-- Modal Header -->
           <div class="modal-header">
@@ -64,13 +64,19 @@
                   <div v-if="validationErrors.est_personne" class="text-danger">{{ validationErrors.est_personne }}</div>
                 </div>
 
-                <div class="mb-3" v-if="!isEditing">
+                <div class="mb-3" v-if="!isEditing ">
                   <label class="form-label"><strong>Devis :</strong></label>
                   <ul class="list-group">
+                    <div v-if="devis && devis.length > 0">
                     <li v-for="d in devis" :key="d.id" class="list-group-item bg-dark text-white">
-                      <strong>Numéro:</strong> {{ d.numero }} - <strong>Prix:</strong> {{ d.prix }} / {{ d.frequence_prix }}
+
+                      <strong>Numéro:</strong> {{ d.numero }} <br>
+                      <strong>Prix:</strong> {{ d.prix }} / {{ d.frequence_prix }}
                     </li>
+                    </div>
+                    <div v-else>N/A</div>
                   </ul>
+
                 </div>
               </div>
             </div>
